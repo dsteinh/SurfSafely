@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="table-quiz-01" author="dsteinh">
+        <createTable tableName="quiz">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="nvarchar(25)"/>
+            <column name="description" type="nvarchar(150)"/>
+            <column name="author_id" type="bigint"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="table-quiz-02" author="dsteinh">
+        <createSequence sequenceName="quiz_id_seq" startValue="1" incrementBy="1"/>
+        <rollback>
+            <dropSequence sequenceName="answer_seq"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="table-quiz-03" author="dsteinh">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="quiz"
+                                 constraintName="FK_QUIZ_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user"/>
+    </changeSet>
+</databaseChangeLog>

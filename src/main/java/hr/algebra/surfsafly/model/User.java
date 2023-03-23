@@ -16,10 +16,10 @@ public class User {
     @GeneratedValue(generator = "user_id_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Column(name = "username", nullable = false)

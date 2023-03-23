@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+    <changeSet id="table-answer-01" author="dsteinh">
+        <createTable tableName="answer">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="question_id" type="bigint"/>
+            <column name="answer_text" type="nvarchar(150)"/>
+            <column name="is_correct" type="boolean"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="table-answer-02" author="dsteinh">
+        <createSequence sequenceName="answer_seq" startValue="1" incrementBy="1"/>
+        <rollback>
+            <dropSequence sequenceName="answer_seq"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="table-answer-03" author="dsteinh">
+        <addForeignKeyConstraint baseTableName="answer" baseColumnNames="question_id"
+                                 constraintName="FK_ANSWER_ON_QUESTION" referencedTableName="question"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

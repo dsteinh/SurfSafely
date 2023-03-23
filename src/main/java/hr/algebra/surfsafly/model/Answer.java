@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_seq")
-    @SequenceGenerator(name = "answer_seq")
+    @SequenceGenerator(name = "answer_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
 
