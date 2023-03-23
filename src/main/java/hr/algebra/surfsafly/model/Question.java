@@ -31,7 +31,5 @@ public class Question {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
     private List<Answer> answers;
 
-
-
 }
 

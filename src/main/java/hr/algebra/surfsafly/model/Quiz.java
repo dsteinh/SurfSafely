@@ -33,4 +33,5 @@ public class Quiz {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "quiz")
     private List<Question> questions;
+
 }
