@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SurfSaflyApplication {
+public class SurfSafelyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SurfSaflyApplication.class, args);
+        SpringApplication.run(SurfSafelyApplication.class, args);
     }
 
 }

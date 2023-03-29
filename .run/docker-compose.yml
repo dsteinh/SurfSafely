@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: surf-safely-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  app:
+    image: surf-safely
+    command: [ "java", "-jar", "/surf-safely.jar" ]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/surf-safely-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./target:/surf-safely
+    depends_on:
+      - db
