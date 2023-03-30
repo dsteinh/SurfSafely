@@ -20,7 +20,5 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
       - "8081:8080"
-    volumes:
-      - ./target:/surf-safely
     depends_on:
       - db
