@@ -4,10 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
-
-<include file="db/changelog/table/user.xml"/>
-<include file="db/changelog/table/additions/rename-user.xml"/>
-<include file="db/changelog/table/quiz.xml"/>
-<include file="db/changelog/table/question.xml"/>
-<include file="db/changelog/table/answer.xml"/>
+    <changeSet author="dsteinh" id="rename_user_table">
+        <renameTable oldTableName="user" newTableName="user_table"/>
+    </changeSet>
 </databaseChangeLog>
