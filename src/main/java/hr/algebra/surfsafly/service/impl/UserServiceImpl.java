@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,11 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("Invalid username and password");
         }
         return user;
+    }
+
+    @Override
+    public Optional<User> getByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
 }
