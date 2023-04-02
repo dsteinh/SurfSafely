@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.AuthenticationException;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,14 +48,14 @@ public class UserController {
             if (Objects.isNull(userDto.getUsername()) || Objects.isNull(userDto.getPassword())) {
                 throw new UserNotFoundException("Username or Password is Empty");
             }
-            User userData = userService.getUserByUsernameAndPassword(userDto.getUsername(), userDto.getPassword());
+            Optional<User> userData = userService.getUserByUsernameAndPassword(userDto.getUsername(), userDto.getPassword());
             if (Objects.isNull(userData)) {
                 throw new UserNotFoundException("Username or Password is Invalid");
             }
             return new ResponseEntity<>(ApiResponse.ok(jwtGenerator.generateToken(
                     userConverter.convert(userDto))), HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(ApiResponse.error(userDto, e.getMessage()), HttpStatus.NOT_FOUND);
+        } catch (UserNotFoundException | AuthenticationException e) {
+            return new ResponseEntity<>(ApiResponse.builder().error(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 }

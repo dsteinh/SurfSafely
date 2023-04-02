@@ -4,13 +4,14 @@ import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.User;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @Service
 public interface UserService {
     void saveUser(User user);
 
-    User getUserByUsernameAndPassword(String username, String password) throws UserNotFoundException;
+    Optional<User> getUserByUsernameAndPassword(String username, String password) throws UserNotFoundException, AuthenticationException;
 
     Optional<User> getByUsername(String username);
 }
