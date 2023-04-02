@@ -34,4 +34,8 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role role;
+
 }

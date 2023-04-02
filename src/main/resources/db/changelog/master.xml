@@ -11,4 +11,5 @@
 <include file="db/changelog/table/quiz.xml"/>
 <include file="db/changelog/table/question.xml"/>
 <include file="db/changelog/table/answer.xml"/>
+<include file="db/changelog/table/role.xml"/>
 </databaseChangeLog>
