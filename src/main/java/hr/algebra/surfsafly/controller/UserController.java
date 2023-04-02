@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.management.relation.RoleNotFoundException;
 import javax.naming.AuthenticationException;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,7 +55,7 @@ public class UserController {
             }
             return new ResponseEntity<>(ApiResponse.ok(jwtGenerator.generateToken(
                     userConverter.convert(userDto))), HttpStatus.OK);
-        } catch (UserNotFoundException | AuthenticationException e) {
+        } catch (UserNotFoundException | AuthenticationException | RoleNotFoundException e) {
             return new ResponseEntity<>(ApiResponse.builder().error(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
