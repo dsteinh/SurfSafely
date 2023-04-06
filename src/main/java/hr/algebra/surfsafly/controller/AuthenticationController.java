@@ -5,7 +5,7 @@ import hr.algebra.surfsafly.dto.ApiResponse;
 import hr.algebra.surfsafly.dto.UserDto;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.User;
-import hr.algebra.surfsafly.security.JwtGenerator;
+import hr.algebra.surfsafly.security.JwtUtils;
 import hr.algebra.surfsafly.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,11 +22,11 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/user")
-public class UserController {
+@RequestMapping("api/auth")
+public class AuthenticationController {
     public static final String ALREADY_EXISTS_ERROR = "username already exists";
     private final UserService userService;
-    private final JwtGenerator jwtGenerator;
+    private final JwtUtils jwtUtils;
     private final UserConverter userConverter;
 
     @PostMapping("/register")
@@ -53,7 +53,7 @@ public class UserController {
             if (Objects.isNull(userData)) {
                 throw new UserNotFoundException("Username or Password is Invalid");
             }
-            return new ResponseEntity<>(ApiResponse.ok(jwtGenerator.generateToken(
+            return new ResponseEntity<>(ApiResponse.ok(jwtUtils.generateToken(
                     userConverter.convert(userDto))), HttpStatus.OK);
         } catch (UserNotFoundException | AuthenticationException | RoleNotFoundException e) {
             return new ResponseEntity<>(ApiResponse.builder().error(e.getMessage()).build(), HttpStatus.NOT_FOUND);

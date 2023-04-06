@@ -27,8 +27,7 @@ public class UserConverter {
     }
 
     public User convert(UserDto userDto) throws RoleNotFoundException {
-        if (userRepository.findUserByUsername(userDto.getUsername()).isPresent())
-        {
+        if (userRepository.findUserByUsername(userDto.getUsername()).isPresent()) {
             return userRepository.findUserByUsername(userDto.getUsername()).get();
         }
 
@@ -40,8 +39,7 @@ public class UserConverter {
                 .email(userDto.getEmail())
                 .role(roleRepository
                         .findById(userDto.getRoleId())
-                        .orElseThrow(() -> new RoleNotFoundException("role with given id does not exist")))
-                .build();
+                        .orElseThrow(() -> new RoleNotFoundException("role with given id does not exist"))).build();
     }
 
 
