@@ -11,14 +11,6 @@ public class ApiResponseDto {
     private Object data;
     private String error;
 
-    public ApiResponseDto(final Object data) {
-        this.data = data;
-    }
-
-    public ApiResponseDto(final String error) {
-        this.error = error;
-    }
-
     public static ApiResponseDto ok(final Object data) {
         return new ApiResponseDto(data, "");
     }
