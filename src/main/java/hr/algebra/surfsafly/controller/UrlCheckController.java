@@ -4,19 +4,19 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.safebrowsing.v4.Safebrowsing;
-import com.google.api.services.safebrowsing.v4.model.*;
+import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4FindThreatMatchesRequest;
+import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4FindThreatMatchesResponse;
+import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4ThreatInfo;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
-import org.apache.http.protocol.HTTP;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("api")
@@ -31,8 +31,8 @@ public class UrlCheckController {
 
 
     @PostMapping("/checkUrl")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponseDto> checkUrl(@RequestBody GoogleSecuritySafebrowsingV4FindThreatMatchesRequest json) throws GeneralSecurityException, IOException {
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ApiResponseDto> checkUrl(@RequestBody GoogleSecuritySafebrowsingV4ThreatInfo json) throws GeneralSecurityException, IOException {
 
         httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
@@ -42,9 +42,13 @@ public class UrlCheckController {
                 null
         ).setApplicationName(APPLICATION_NAME).build();
 
-        Safebrowsing.ThreatMatches.Find request = safebrowsing.threatMatches().find(json).setKey(googleSafeBrowsingApiKey);
+        var request = new GoogleSecuritySafebrowsingV4FindThreatMatchesRequest();
+        request.setThreatInfo(json);
+        request.setThreatInfo(json);
 
-        GoogleSecuritySafebrowsingV4FindThreatMatchesResponse results = request.execute();
+        Safebrowsing.ThreatMatches.Find finder = safebrowsing.threatMatches().find(request).setKey(googleSafeBrowsingApiKey);
+
+        GoogleSecuritySafebrowsingV4FindThreatMatchesResponse results = finder.execute();
 
         return new ResponseEntity<>(ApiResponseDto.ok(results), HttpStatus.OK);
     }
