@@ -8,6 +8,7 @@ import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV
 import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4FindThreatMatchesResponse;
 import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4ThreatInfo;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +23,8 @@ import java.security.GeneralSecurityException;
 @RequestMapping("api")
 public class UrlCheckController {
 
-    //Change to docker environment variable
-    private String googleSafeBrowsingApiKey = "AIzaSyBq9g4Af77lLKZGN-gm3jAZRd65QvpIvZI";
+    @Value("${google.safebrowsing.api.key}")
+    private String googleSafeBrowsingApiKey;
 
     public static final GsonFactory GOOGLE_JSON_FACTORY = GsonFactory.getDefaultInstance();
     public static final String APPLICATION_NAME = "SurfSafely";
