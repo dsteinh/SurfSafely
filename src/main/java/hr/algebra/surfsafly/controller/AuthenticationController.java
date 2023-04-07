@@ -1,7 +1,7 @@
 package hr.algebra.surfsafly.controller;
 
 import hr.algebra.surfsafly.converter.UserConverter;
-import hr.algebra.surfsafly.dto.ApiResponse;
+import hr.algebra.surfsafly.dto.ApiResponseDto;
 import hr.algebra.surfsafly.dto.UserDto;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.User;
@@ -30,33 +30,33 @@ public class AuthenticationController {
     private final UserConverter userConverter;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponseDto> register(@RequestBody UserDto userDto) {
         if (userService.getByUsername(userDto.getUsername()).isPresent()) {
-            return new ResponseEntity<>(ApiResponse.error(userDto, ALREADY_EXISTS_ERROR), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ApiResponseDto.error(userDto, ALREADY_EXISTS_ERROR), HttpStatus.CONFLICT);
         }
         try {
             User user = userConverter.convert(userDto);
             userService.saveUser(user);
-            return new ResponseEntity<>(ApiResponse.ok(userDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(ApiResponseDto.ok(userDto), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(ApiResponse.error(userDto, e.getMessage()), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ApiResponseDto.error(userDto, e.getMessage()), HttpStatus.CONFLICT);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponseDto> login(@RequestBody UserDto userDto) {
         try {
             if (Objects.isNull(userDto.getUsername()) || Objects.isNull(userDto.getPassword())) {
                 throw new UserNotFoundException("Username or Password is Empty");
             }
             Optional<User> userData = userService.getUserByUsernameAndPassword(userDto.getUsername(), userDto.getPassword());
-            if (Objects.isNull(userData)) {
+            if (userData.isEmpty()) {
                 throw new UserNotFoundException("Username or Password is Invalid");
             }
-            return new ResponseEntity<>(ApiResponse.ok(jwtUtils.generateToken(
+            return new ResponseEntity<>(ApiResponseDto.ok(jwtUtils.generateToken(
                     userConverter.convert(userDto))), HttpStatus.OK);
         } catch (UserNotFoundException | AuthenticationException | RoleNotFoundException e) {
-            return new ResponseEntity<>(ApiResponse.builder().error(e.getMessage()).build(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ApiResponseDto.builder().error(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 }
