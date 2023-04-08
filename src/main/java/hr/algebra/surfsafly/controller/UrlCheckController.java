@@ -8,6 +8,7 @@ import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV
 import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4FindThreatMatchesResponse;
 import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4ThreatInfo;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,34 +24,24 @@ import java.security.GeneralSecurityException;
 @RequestMapping("api")
 public class UrlCheckController {
 
-    @Value("${google.safebrowsing.api.key}")
-    private String googleSafeBrowsingApiKey;
+    private final Safebrowsing safebrowsing;
+    private final String googleSafeBrowsingApiKey;
 
-    public static final GsonFactory GOOGLE_JSON_FACTORY = GsonFactory.getDefaultInstance();
-    public static final String APPLICATION_NAME = "SurfSafely";
-    public static NetHttpTransport httpTransport;
-
+    public UrlCheckController(Safebrowsing safebrowsing, @Value("${google.safebrowsing.api.key}") String googleSafeBrowsingApiKey) {
+        this.safebrowsing = safebrowsing;
+        this.googleSafeBrowsingApiKey = googleSafeBrowsingApiKey;
+    }
 
     @PostMapping("/checkUrl")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponseDto> checkUrl(@RequestBody GoogleSecuritySafebrowsingV4ThreatInfo json) throws GeneralSecurityException, IOException {
-
-        httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-
-        Safebrowsing safebrowsing = new Safebrowsing.Builder(
-                httpTransport,
-                GOOGLE_JSON_FACTORY,
-                null
-        ).setApplicationName(APPLICATION_NAME).build();
-
         var request = new GoogleSecuritySafebrowsingV4FindThreatMatchesRequest();
-        request.setThreatInfo(json);
         request.setThreatInfo(json);
 
         Safebrowsing.ThreatMatches.Find finder = safebrowsing.threatMatches().find(request).setKey(googleSafeBrowsingApiKey);
 
         GoogleSecuritySafebrowsingV4FindThreatMatchesResponse results = finder.execute();
-
         return new ResponseEntity<>(ApiResponseDto.ok(results), HttpStatus.OK);
     }
+
 }
