@@ -5,9 +5,11 @@ import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV
 import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4FindThreatMatchesResponse;
 import com.google.api.services.safebrowsing.v4.model.GoogleSecuritySafebrowsingV4ThreatInfo;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,18 +20,17 @@ import java.security.GeneralSecurityException;
 
 @RestController
 @RequestMapping("api")
+@RequiredArgsConstructor
 public class UrlCheckController {
 
     private final Safebrowsing safebrowsing;
+
+    @Value("${google.safebrowsing.api.key}")
     private final String googleSafeBrowsingApiKey;
 
-    public UrlCheckController(Safebrowsing safebrowsing, @Value("${google.safebrowsing.api.key}") String googleSafeBrowsingApiKey) {
-        this.safebrowsing = safebrowsing;
-        this.googleSafeBrowsingApiKey = googleSafeBrowsingApiKey;
-    }
 
     @PostMapping("/checkUrl")
-//@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<ApiResponseDto> checkUrl(@RequestBody GoogleSecuritySafebrowsingV4ThreatInfo json) throws GeneralSecurityException, IOException {
         var request = new GoogleSecuritySafebrowsingV4FindThreatMatchesRequest();
         request.setThreatInfo(json);
