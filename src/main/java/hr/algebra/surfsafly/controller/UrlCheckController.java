@@ -26,7 +26,7 @@ public class UrlCheckController {
     private final Safebrowsing safebrowsing;
 
     @Value("${google.safebrowsing.api.key}")
-    private final String googleSafeBrowsingApiKey;
+    private String googleSafeBrowsingApiKey;
 
 
     @PostMapping("/checkUrl")
