@@ -65,6 +65,11 @@
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-safebrowsing</artifactId>
+            <version>v4-rev20230212-2.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
