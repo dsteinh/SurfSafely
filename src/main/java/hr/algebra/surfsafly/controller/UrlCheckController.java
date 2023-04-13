@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 @RestController
 @RequestMapping("api")
@@ -26,12 +25,12 @@ public class UrlCheckController {
     private final Safebrowsing safebrowsing;
 
     @Value("${google.safebrowsing.api.key}")
-    private final String googleSafeBrowsingApiKey;
+    private String googleSafeBrowsingApiKey;
 
 
     @PostMapping("/checkUrl")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    public ResponseEntity<ApiResponseDto> checkUrl(@RequestBody GoogleSecuritySafebrowsingV4ThreatInfo json) throws GeneralSecurityException, IOException {
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public ResponseEntity<ApiResponseDto> checkUrl(@RequestBody GoogleSecuritySafebrowsingV4ThreatInfo json) throws IOException {
         var request = new GoogleSecuritySafebrowsingV4FindThreatMatchesRequest();
         request.setThreatInfo(json);
 
