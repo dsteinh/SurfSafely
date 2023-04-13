@@ -5,11 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-<include file="db/changelog/table/user.xml"/>
-<include file="db/changelog/table/additions/rename-user.xml"/>
-<include file="db/changelog/table/additions/add-more-size-to-user-password.xml"/>
-<include file="db/changelog/table/quiz.xml"/>
-<include file="db/changelog/table/question.xml"/>
-<include file="db/changelog/table/answer.xml"/>
-<include file="db/changelog/table/role.xml"/>
+    <include file="db/changelog/table/user.xml"/>
+    <include file="db/changelog/table/quiz.xml"/>
+    <include file="db/changelog/table/additions/rename-user.xml"/>
+    <include file="db/changelog/table/additions/add-more-size-to-user-password.xml"/>
+    <include file="db/changelog/table/question.xml"/>
+    <include file="db/changelog/table/answer.xml"/>
+    <include file="db/changelog/table/role.xml"/>
 </databaseChangeLog>

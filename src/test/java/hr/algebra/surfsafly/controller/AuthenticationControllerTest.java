@@ -55,11 +55,7 @@ class AuthenticationControllerTest {
 
     @Test
     void register_returnsCreatedResponse_whenUserIsRegistered() throws Exception {
-
-        //User user = UserMother.complete().build();
         UserDto userDto = UserDtoMother.complete().build();
-        //Mockito.when(userConverter.convert(userDto)).thenReturn(user);
-        //Mockito.when(userService.getUserByUsernameAndPassword(user.getUsername(), user.getPassword())).thenReturn(Optional.ofNullable(user));
 
         mvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
