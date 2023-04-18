@@ -1,7 +1,8 @@
 package hr.algebra.surfsafly.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
-import hr.algebra.surfsafly.dto.ScanResultDTO;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +44,11 @@ public class FileCheckController {
 
         Response response = client.newCall(request).execute();
 
-        return new ResponseEntity<>(ApiResponseDto.ok(response), HttpStatus.OK);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode jsonResponse = objectMapper.readTree(response.body().string());
+
+
+        return new ResponseEntity<>(ApiResponseDto.ok(jsonResponse), HttpStatus.OK);
     }
 }
