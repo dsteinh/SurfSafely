@@ -31,7 +31,7 @@ import java.util.Optional;
 import static hr.algebra.surfsafly.utils.StringUtils.asJsonString;
 
 
-@WebMvcTest
+@WebMvcTest(controllers = AuthenticationController.class)
 @Import(SecurityConfiguration.class)
 class AuthenticationControllerTest {
 

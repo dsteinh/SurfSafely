@@ -12,4 +12,5 @@
     <include file="db/changelog/table/question.xml"/>
     <include file="db/changelog/table/answer.xml"/>
     <include file="db/changelog/table/role.xml"/>
+    <include file="db/changelog/table/jwt-blacklist.xml"/>
 </databaseChangeLog>
