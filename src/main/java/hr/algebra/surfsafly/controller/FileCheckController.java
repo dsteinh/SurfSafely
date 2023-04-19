@@ -22,9 +22,10 @@ import java.io.IOException;
 public class FileCheckController {
 
     @Value("${virustotal.api.key}")
-    private String virustotalApiKey;
+    private String virusTotalApiKey;
 
-    private final String VIRUSTOTAL_API_URL = "https://www.virustotal.com/api/v3/files/{sha256}";
+    @Value("${virustotal.sha.url}")
+    private String virusTotalUrl;
 
     @PostMapping("/checkFile")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
@@ -32,14 +33,14 @@ public class FileCheckController {
 
         byte[] fileContent = file.getBytes();
         String sha256 = DigestUtils.sha256Hex(fileContent);
-        String url = VIRUSTOTAL_API_URL.replace("{sha256}", sha256);
+        String url = virusTotalUrl.replace("{sha256}", sha256);
 
 
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("x-apikey", virustotalApiKey)
+                .addHeader("x-apikey", virusTotalApiKey)
                 .build();
 
         Response response = client.newCall(request).execute();
