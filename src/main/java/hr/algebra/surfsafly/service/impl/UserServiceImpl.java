@@ -1,5 +1,7 @@
 package hr.algebra.surfsafly.service.impl;
 
+import hr.algebra.surfsafly.dto.ChangePasswordDto;
+import hr.algebra.surfsafly.exception.PasswordMismatchException;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.repository.UserRepository;
@@ -17,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     public static final String USERNAME_OR_PASSWORD_ERROR = "Invalid username or password";
     public static final String USER_NOT_FOUND_ERROR = "User with username %s doesn't exist";
+    public static final String CURRENT_PASSWORD_ERROR = "wrong current password";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
@@ -44,6 +47,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getByUsername(String username) {
         return userRepository.findUserByUsername(username);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordDto changePasswordDto, User user) throws PasswordMismatchException {
+        if (encoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            user.setPassword(changePasswordDto.getNewPassword());
+            saveUser(user);
+            return;
+        }
+        throw new PasswordMismatchException(CURRENT_PASSWORD_ERROR);
     }
 
 }

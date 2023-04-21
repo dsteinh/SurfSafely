@@ -2,11 +2,14 @@ package hr.algebra.surfsafly.controller;
 
 import hr.algebra.surfsafly.converter.UserConverter;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
+import hr.algebra.surfsafly.dto.ChangePasswordDto;
 import hr.algebra.surfsafly.dto.UserDto;
+import hr.algebra.surfsafly.exception.PasswordMismatchException;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.JwtBlacklistData;
 import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.security.JwtUtils;
+import hr.algebra.surfsafly.service.CurrentUserService;
 import hr.algebra.surfsafly.service.JwtBlacklistService;
 import hr.algebra.surfsafly.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class AuthenticationController {
     private final JwtUtils jwtUtils;
     private final UserConverter userConverter;
     private final JwtBlacklistService jwtBlacklistService;
+    private final CurrentUserService currentUserService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponseDto> register(@RequestBody UserDto userDto) {
@@ -75,4 +79,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(ApiResponseDto.ok("token added to blacklist"));
     }
 
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResponseDto> changePassword(@RequestBody ChangePasswordDto changePasswordDto) throws UserNotFoundException, PasswordMismatchException {
+        User currentUser = currentUserService.getCurrentUser();
+        userService.changePassword(changePasswordDto, currentUser);
+        return ResponseEntity.ok(ApiResponseDto.ok("password was successfully changed"));
+    }
 }

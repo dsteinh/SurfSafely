@@ -67,7 +67,7 @@ public class JwtUtilsImpl implements JwtUtils {
     @Transactional
     public boolean isTokenExpired(String token) {
         Date expiration = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getExpiration();
-        boolean isExpired = expiration.after(new Date());
+        boolean isExpired = expiration.before(new Date());
         if (isExpired && jwtBlacklistService.isBlacklisted(token)) {
             jwtBlacklistService.deleteByToken(token);
         }
