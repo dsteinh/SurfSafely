@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+    <changeSet id="table-jwt-blacklist-01" author="dsteinh">
+    <createTable tableName="jwt_blacklist">
+        <column name="id" type="bigint" autoIncrement="true">
+            <constraints primaryKey="true"/>
+        </column>
+        <column name="token" type="nvarchar(100)"/>
+        <column name="expired" type="boolean"/>
+    </createTable>
+    </changeSet>
+    <changeSet id="table-jwt-blacklist-02" author="dsteinh">
+        <createSequence sequenceName="jwt_blacklist_id_seq" startValue="1" incrementBy="1"/>
+        <rollback>
+            <dropSequence sequenceName="jwt_blacklist_id_seq"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

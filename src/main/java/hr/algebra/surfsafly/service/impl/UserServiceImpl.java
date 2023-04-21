@@ -1,8 +1,12 @@
 package hr.algebra.surfsafly.service.impl;
 
+import hr.algebra.surfsafly.dto.ChangePasswordDto;
+import hr.algebra.surfsafly.exception.PasswordMismatchException;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
+import hr.algebra.surfsafly.model.JwtBlacklistData;
 import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.repository.UserRepository;
+import hr.algebra.surfsafly.service.JwtBlacklistService;
 import hr.algebra.surfsafly.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,8 +21,10 @@ public class UserServiceImpl implements UserService {
 
     public static final String USERNAME_OR_PASSWORD_ERROR = "Invalid username or password";
     public static final String USER_NOT_FOUND_ERROR = "User with username %s doesn't exist";
+    public static final String CURRENT_PASSWORD_ERROR = "wrong current password";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+    private final JwtBlacklistService jwtBlacklistService;
 
     @Override
     public void saveUser(User user) {
@@ -46,4 +52,24 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByUsername(username);
     }
 
+    @Override
+    public void changePassword(ChangePasswordDto changePasswordDto, User user) throws PasswordMismatchException {
+        if (encoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            user.setPassword(changePasswordDto.getNewPassword());
+            saveUser(user);
+            return;
+        }
+        throw new PasswordMismatchException(CURRENT_PASSWORD_ERROR);
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void anonymizeUser(User user, String token) {
+        userRepository.anonymizeUser(user);
+        jwtBlacklistService.save(JwtBlacklistData.builder().token(token).build());
+    }
 }

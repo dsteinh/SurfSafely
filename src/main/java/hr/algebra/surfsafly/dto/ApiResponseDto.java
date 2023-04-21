@@ -14,6 +14,9 @@ public class ApiResponseDto {
     public static ApiResponseDto ok(final Object data) {
         return new ApiResponseDto(data, "");
     }
+    public static ApiResponseDto ok(final Object data, String message) {
+        return new ApiResponseDto(data, message);
+    }
     public static ApiResponseDto error(final Object data, final String error ) {
         return new ApiResponseDto(data, error);
     }
