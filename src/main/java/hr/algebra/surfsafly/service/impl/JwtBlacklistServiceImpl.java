@@ -15,4 +15,14 @@ public class JwtBlacklistServiceImpl implements JwtBlacklistService {
     public void save(JwtBlacklistData jwtBlacklistData) {
         jwtBlacklistRepository.save(jwtBlacklistData);
     }
+
+    @Override
+    public boolean isBlacklisted(String token) {
+        return jwtBlacklistRepository.findByToken(token).isPresent();
+    }
+
+    @Override
+    public void deleteByToken(String token) {
+        jwtBlacklistRepository.deleteByToken(token);
+    }
 }

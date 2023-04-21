@@ -4,16 +4,16 @@ import hr.algebra.surfsafly.converter.UserConverter;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
 import hr.algebra.surfsafly.dto.UserDto;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
+import hr.algebra.surfsafly.model.JwtBlacklistData;
 import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.security.JwtUtils;
+import hr.algebra.surfsafly.service.JwtBlacklistService;
 import hr.algebra.surfsafly.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.management.relation.RoleNotFoundException;
 import javax.naming.AuthenticationException;
@@ -23,11 +23,13 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
+@Log4j2
 public class AuthenticationController {
     public static final String ALREADY_EXISTS_ERROR = "username already exists";
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final UserConverter userConverter;
+    private final JwtBlacklistService jwtBlacklistService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponseDto> register(@RequestBody UserDto userDto) {
@@ -59,4 +61,18 @@ public class AuthenticationController {
             return new ResponseEntity<>(ApiResponseDto.builder().error(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<ApiResponseDto> blacklistToken(@RequestHeader(name = "Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        } else {
+            log.warn("JWT Token does not begin with Bearer String");
+        }
+        JwtBlacklistData jwtBlacklistData = JwtBlacklistData.builder()
+                .token(token).build();
+        jwtBlacklistService.save(jwtBlacklistData);
+        return ResponseEntity.ok(ApiResponseDto.ok("token added to blacklist"));
+    }
+
 }

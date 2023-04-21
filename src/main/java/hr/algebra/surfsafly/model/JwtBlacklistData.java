@@ -21,6 +21,4 @@ public class JwtBlacklistData {
     @Column(name = "token")
     private String token;
 
-    @Column(name = "expired")
-    private Boolean isExpired;
 }
