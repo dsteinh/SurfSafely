@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class JwtUtilsImpl implements JwtUtils {
 
     @Value("${jwt.secret}")
@@ -77,5 +79,14 @@ public class JwtUtilsImpl implements JwtUtils {
     public String getRoleFromJwtToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
         return (String) claims.get("role");
+    }
+
+    public static String trimJwtToken(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        } else {
+            log.warn("JWT Token does not begin with Bearer String");
+        }
+        return token;
     }
 }

@@ -1,8 +1,6 @@
-package hr.algebra.surfsafly.configuration;
+package hr.algebra.surfsafly.exception;
 
 import hr.algebra.surfsafly.dto.ApiResponseDto;
-import hr.algebra.surfsafly.exception.PasswordMismatchException;
-import hr.algebra.surfsafly.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,13 +19,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("", e.getMessage()));
     }
 
-    @ExceptionHandler(Exception.class)
+/*    @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDto> handleOtherExceptions(Exception e) {
 
         if (e instanceof IllegalStateException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("", e.getCause().getMessage()));
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDto.error("", "An unexpected error occurred"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDto.error("", e.getMessage()*//*"An unexpected error occurred"*//*));
         }
-    }
+    }*/
 }

@@ -9,6 +9,7 @@ import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.JwtBlacklistData;
 import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.security.JwtUtils;
+import hr.algebra.surfsafly.security.JwtUtilsImpl;
 import hr.algebra.surfsafly.service.CurrentUserService;
 import hr.algebra.surfsafly.service.JwtBlacklistService;
 import hr.algebra.surfsafly.service.UserService;
@@ -56,7 +57,7 @@ public class AuthenticationController {
                 throw new UserNotFoundException("Username or Password is Empty");
             }
             Optional<User> userData = userService.getUserByUsernameAndPassword(userDto.getUsername(), userDto.getPassword());
-            if (userData.isEmpty()) {
+            if (userData.isEmpty() || Objects.equals(userDto.getUsername(), "Anonymous")) {
                 throw new UserNotFoundException("Username or Password is Invalid");
             }
             return new ResponseEntity<>(ApiResponseDto.ok(jwtUtils.generateToken(
@@ -68,16 +69,14 @@ public class AuthenticationController {
 
     @GetMapping("/logout")
     public ResponseEntity<ApiResponseDto> blacklistToken(@RequestHeader(name = "Authorization") String token) {
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        } else {
-            log.warn("JWT Token does not begin with Bearer String");
-        }
+        token = JwtUtilsImpl.trimJwtToken(token);
         JwtBlacklistData jwtBlacklistData = JwtBlacklistData.builder()
                 .token(token).build();
         jwtBlacklistService.save(jwtBlacklistData);
         return ResponseEntity.ok(ApiResponseDto.ok("token added to blacklist"));
     }
+
+
 
     @PostMapping("/change-password")
     public ResponseEntity<ApiResponseDto> changePassword(@RequestBody ChangePasswordDto changePasswordDto) throws UserNotFoundException, PasswordMismatchException {
