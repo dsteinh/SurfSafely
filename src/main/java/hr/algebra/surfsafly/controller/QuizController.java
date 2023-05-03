@@ -21,9 +21,9 @@ public class QuizController {
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
 
-    @PostMapping("/makeQuiz")
-    public void saveQuiz(@RequestBody QuizDto quizDto){
-        Quiz quiz=new Quiz();
+    @PostMapping("/create")
+    public void saveQuiz(@RequestBody QuizDto quizDto) {
+        Quiz quiz = new Quiz();
         quiz.setTitle(quizDto.getTitle());
         quiz.setDescription(quizDto.getDescription());
         Optional<User> author = userRepository.findUserByUsername(quizDto.getAuthor());
