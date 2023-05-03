@@ -9,6 +9,8 @@ import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.security.JwtRequestFilter;
 import hr.algebra.surfsafly.security.JwtUserDetailsService;
 import hr.algebra.surfsafly.security.JwtUtils;
+import hr.algebra.surfsafly.service.CurrentUserService;
+import hr.algebra.surfsafly.service.JwtBlacklistService;
 import hr.algebra.surfsafly.service.UserService;
 import hr.algebra.surfsafly.util.user.UserDtoMother;
 import hr.algebra.surfsafly.util.user.UserMother;
@@ -41,6 +43,12 @@ class AuthenticationControllerTest {
     private UserService userService;
     @MockBean
     private UserConverter userConverter;
+
+    @MockBean
+    private JwtBlacklistService jwtBlacklistService;
+
+    @MockBean
+    private CurrentUserService currentUserService;
 
     @MockBean
     private JwtUtils jwtUtils;
