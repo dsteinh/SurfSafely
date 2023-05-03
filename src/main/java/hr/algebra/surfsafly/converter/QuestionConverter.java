@@ -1,9 +1,7 @@
 package hr.algebra.surfsafly.converter;
 
 import hr.algebra.surfsafly.dto.QuestionDto;
-import hr.algebra.surfsafly.dto.QuizDto;
 import hr.algebra.surfsafly.model.Question;
-import hr.algebra.surfsafly.model.Quiz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +16,7 @@ public class QuestionConverter {
                         .stream().map(answerConverter::convert).toList())
                 .build();
     }
+
     public Question convert(QuestionDto questionDto) {
         return Question.builder()
                 .answers(questionDto.getAnswerDtoList()
