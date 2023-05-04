@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface QuizService {
-    void createQuiz(Quiz quiz);
+    Quiz create(Quiz quiz);
 }

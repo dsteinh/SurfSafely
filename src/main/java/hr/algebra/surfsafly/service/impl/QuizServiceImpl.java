@@ -12,7 +12,7 @@ public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
 
     @Override
-    public void createQuiz(Quiz quiz) {
-        quizRepository.save(quiz);
+    public Quiz create(Quiz quiz) {
+        return quizRepository.save(quiz);
     }
 }

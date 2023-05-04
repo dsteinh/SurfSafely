@@ -4,9 +4,7 @@ import hr.algebra.surfsafly.dto.ApiResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -25,7 +23,7 @@ public class GlobalExceptionHandler {
         if (e instanceof IllegalStateException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("", e.getCause().getMessage()));
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDto.error("", "An unexpected error occurred"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDto.error("", e.getMessage()));
         }
     }
 }
