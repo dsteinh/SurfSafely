@@ -6,6 +6,8 @@ import hr.algebra.surfsafly.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
@@ -14,5 +16,20 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Quiz create(Quiz quiz) {
         return quizRepository.save(quiz);
+    }
+
+    @Override
+    public void delete(Long id) {
+        quizRepository.deleteById(id);
+    }
+
+    @Override
+    public Quiz getQuizById(Long id) {
+        return quizRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<Quiz> getAll() {
+    return quizRepository.getAllBy();
     }
 }

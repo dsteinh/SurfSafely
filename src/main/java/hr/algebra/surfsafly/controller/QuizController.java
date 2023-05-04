@@ -9,10 +9,10 @@ import hr.algebra.surfsafly.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,10 +23,29 @@ public class QuizController {
     private final QuizConverter quizConverter;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ApiResponseDto> saveQuiz(@RequestBody QuizDto quizDto) {
         Quiz quiz = quizConverter.convert(quizDto);
         log.warn(quiz);
         return ResponseEntity.ok(ApiResponseDto.ok(quizService.create(quiz)));
     }
-    //dodati rud operacije
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<ApiResponseDto> deleteQuiz(@PathVariable Long id) {
+        quizService.delete(id);
+        return ResponseEntity.ok(ApiResponseDto.ok("", "quiz deleted"));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseDto> getQuizById(@PathVariable Long id) {
+        Quiz quiz = quizService.getQuizById(id);
+        return ResponseEntity.ok(ApiResponseDto.ok(quiz));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponseDto> getAllQuizzes() {
+        List<Quiz> all = quizService.getAll();
+        return ResponseEntity.ok(ApiResponseDto.ok(all));
+    }
 }
