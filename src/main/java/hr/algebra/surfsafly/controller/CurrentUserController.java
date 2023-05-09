@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("api/current-user/")
+@RequestMapping("api/current-user")
 @RequiredArgsConstructor
 public class CurrentUserController {
 
     private final CurrentUserService currentUserService;
     private final UserService userService;
 
-    @PostMapping("update-personal-information")
+    @PostMapping("/update-personal-information")
     public ResponseEntity<ApiResponseDto> changePersonalData(@RequestBody ChangeUserInformationDto dto) throws UserNotFoundException {
         User currentUser = currentUserService.getCurrentUser();
         mapPersonalDataDtoToUser(dto, currentUser);
@@ -28,11 +28,17 @@ public class CurrentUserController {
         return ResponseEntity.ok(ApiResponseDto.ok(dto, "user data updated"));
     }
 
-    @DeleteMapping("delete-account")
+    @DeleteMapping("/delete-account")
     public ResponseEntity<ApiResponseDto> deleteAccount(@RequestHeader(name = "Authorization") String token) throws UserNotFoundException {
         User currentUser = currentUserService.getCurrentUser();
         userService.anonymizeUser(currentUser, token);
         return ResponseEntity.ok(ApiResponseDto.ok(currentUser, "user account deleted"));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponseDto> getCurrentUser() throws UserNotFoundException {
+        User currentUser = currentUserService.getCurrentUser();
+        return ResponseEntity.ok(ApiResponseDto.ok(currentUser));
     }
     private void mapPersonalDataDtoToUser(ChangeUserInformationDto dto, User currentUser) {
         currentUser.setEmail(Objects.nonNull(dto.getNewEmail()) ? dto.getNewEmail() : currentUser.getEmail());

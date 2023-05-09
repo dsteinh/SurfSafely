@@ -10,4 +10,5 @@ import java.util.List;
 public class QuestionDto {
     String questionText;
     List<AnswerDto> answerDtoList;
+    Long quizId;
 }

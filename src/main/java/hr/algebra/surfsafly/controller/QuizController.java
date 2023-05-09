@@ -26,7 +26,6 @@ public class QuizController {
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ApiResponseDto> saveQuiz(@RequestBody QuizDto quizDto) {
         Quiz quiz = quizConverter.convert(quizDto);
-        log.warn(quiz);
         return ResponseEntity.ok(ApiResponseDto.ok(quizService.create(quiz)));
     }
 
@@ -35,6 +34,13 @@ public class QuizController {
     public ResponseEntity<ApiResponseDto> deleteQuiz(@PathVariable Long id) {
         quizService.delete(id);
         return ResponseEntity.ok(ApiResponseDto.ok("", "quiz deleted"));
+    }
+
+    @DeleteMapping("/delete/all")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<ApiResponseDto> deleteAll() {
+        quizService.deleteAll();
+        return ResponseEntity.ok(ApiResponseDto.ok("", "all quizzes deleted"));
     }
 
     @GetMapping("/{id}")
