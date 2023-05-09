@@ -11,6 +11,7 @@ public class AnswerConverter {
     public AnswerDto convert(Answer answer) {
         return AnswerDto.builder()
                 .text(answer.getAnswerText())
+                .questionId(answer.getQuestion().getId())
                 .isCorrect(answer.getIsCorrect()).build();
     }
 

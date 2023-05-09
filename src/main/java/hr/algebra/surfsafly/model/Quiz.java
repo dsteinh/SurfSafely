@@ -1,7 +1,11 @@
 package hr.algebra.surfsafly.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +33,8 @@ public class Quiz {
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
-    @ToString.Exclude
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "quiz", cascade=CascadeType.MERGE)
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "quiz", cascade=CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
 
     public void addQuestion(Question question) {

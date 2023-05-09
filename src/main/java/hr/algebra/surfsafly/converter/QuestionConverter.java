@@ -15,6 +15,7 @@ public class QuestionConverter {
                 .questionText(question.getQuestionText())
                 .answerDtoList(question.getAnswers()
                         .stream().map(answerConverter::convert).toList())
+                .quizId(question.getQuiz().getId())
                 .build();
     }
 

@@ -4,6 +4,7 @@ package hr.algebra.surfsafly.controller;
 import hr.algebra.surfsafly.converter.QuizConverter;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
 import hr.algebra.surfsafly.dto.QuizDto;
+import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.Quiz;
 import hr.algebra.surfsafly.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -24,23 +25,24 @@ public class QuizController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<ApiResponseDto> saveQuiz(@RequestBody QuizDto quizDto) {
+    public ResponseEntity<ApiResponseDto> saveQuiz(@RequestBody QuizDto quizDto) throws UserNotFoundException {
         Quiz quiz = quizConverter.convert(quizDto);
-        return ResponseEntity.ok(ApiResponseDto.ok(quizService.create(quiz)));
+        QuizDto quizResponseDto = quizConverter.convert(quizService.create(quiz));
+        return ResponseEntity.ok(ApiResponseDto.ok(quizResponseDto));
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ApiResponseDto> deleteQuiz(@PathVariable Long id) {
         quizService.delete(id);
-        return ResponseEntity.ok(ApiResponseDto.ok("", "quiz deleted"));
+        return ResponseEntity.ok(ApiResponseDto.ok("quiz deleted"));
     }
 
     @DeleteMapping("/delete/all")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ApiResponseDto> deleteAll() {
         quizService.deleteAll();
-        return ResponseEntity.ok(ApiResponseDto.ok("", "all quizzes deleted"));
+        return ResponseEntity.ok(ApiResponseDto.ok("all quizzes deleted"));
     }
 
     @GetMapping("/{id}")

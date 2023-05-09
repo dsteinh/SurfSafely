@@ -25,14 +25,14 @@ public class CurrentUserController {
         User currentUser = currentUserService.getCurrentUser();
         mapPersonalDataDtoToUser(dto, currentUser);
         userService.save(currentUser);
-        return ResponseEntity.ok(ApiResponseDto.ok(dto, "user data updated"));
+        return ResponseEntity.ok(ApiResponseDto.ok(dto));
     }
 
     @DeleteMapping("/delete-account")
     public ResponseEntity<ApiResponseDto> deleteAccount(@RequestHeader(name = "Authorization") String token) throws UserNotFoundException {
         User currentUser = currentUserService.getCurrentUser();
         userService.anonymizeUser(currentUser, token);
-        return ResponseEntity.ok(ApiResponseDto.ok(currentUser, "user account deleted"));
+        return ResponseEntity.ok(ApiResponseDto.ok(currentUser));
     }
 
     @GetMapping

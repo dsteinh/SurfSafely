@@ -4,10 +4,11 @@ package hr.algebra.surfsafly.converter;
 import hr.algebra.surfsafly.dto.AnswerDto;
 import hr.algebra.surfsafly.dto.QuestionDto;
 import hr.algebra.surfsafly.dto.QuizDto;
+import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.Answer;
 import hr.algebra.surfsafly.model.Question;
 import hr.algebra.surfsafly.model.Quiz;
-import hr.algebra.surfsafly.repository.UserRepository;
+import hr.algebra.surfsafly.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class QuizConverter {
 
     private final QuestionConverter questionConverter;
-    private final UserRepository userRepository;
+    private final CurrentUserService userService;
 
     public QuizDto convert(Quiz quiz) {
         return QuizDto.builder()
@@ -27,28 +28,29 @@ public class QuizConverter {
                 .author(quiz.getAuthor().getUsername())
                 .build();
     }
-    public Quiz convert(QuizDto quizDto) {
 
-            Quiz quiz = new Quiz();
-            quiz.setTitle(quizDto.getTitle());
-            quiz.setDescription(quizDto.getDescription());
-            quiz.setAuthor(null);
+    public Quiz convert(QuizDto quizDto) throws UserNotFoundException {
 
-            for (QuestionDto questionDto : quizDto.getQuestionDtoList()) {
-                Question question = new Question();
-                question.setQuestionText(questionDto.getQuestionText());
+        Quiz quiz = new Quiz();
+        quiz.setTitle(quizDto.getTitle());
+        quiz.setDescription(quizDto.getDescription());
+        quiz.setAuthor(userService.getCurrentUser());
 
-                for (AnswerDto answerDto : questionDto.getAnswerDtoList()) {
-                    Answer answer = new Answer();
-                    answer.setAnswerText(answerDto.getText());
-                    answer.setIsCorrect(answerDto.getIsCorrect());
-                    question.addAnswer(answer); // Associate the answer with the question
-                }
+        for (QuestionDto questionDto : quizDto.getQuestionDtoList()) {
+            Question question = new Question();
+            question.setQuestionText(questionDto.getQuestionText());
 
-                quiz.addQuestion(question); // Associate the question with the quiz
+            for (AnswerDto answerDto : questionDto.getAnswerDtoList()) {
+                Answer answer = new Answer();
+                answer.setAnswerText(answerDto.getText());
+                answer.setIsCorrect(answerDto.getIsCorrect());
+                question.addAnswer(answer); // Associate the answer with the question
             }
 
-            return quiz;
+            quiz.addQuestion(question); // Associate the question with the quiz
+        }
+
+        return quiz;
 
 //        return Quiz.builder()
 //                .description(quizDto.getDescription())
