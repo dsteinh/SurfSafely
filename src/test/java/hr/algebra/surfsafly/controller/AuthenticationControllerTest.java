@@ -9,6 +9,8 @@ import hr.algebra.surfsafly.model.User;
 import hr.algebra.surfsafly.security.JwtRequestFilter;
 import hr.algebra.surfsafly.security.JwtUserDetailsService;
 import hr.algebra.surfsafly.security.JwtUtils;
+import hr.algebra.surfsafly.service.CurrentUserService;
+import hr.algebra.surfsafly.service.JwtBlacklistService;
 import hr.algebra.surfsafly.service.UserService;
 import hr.algebra.surfsafly.util.user.UserDtoMother;
 import hr.algebra.surfsafly.util.user.UserMother;
@@ -50,6 +52,12 @@ class AuthenticationControllerTest {
 
     @MockBean
     JwtUserDetailsService jwtUserDetailsService;
+
+    @MockBean
+    JwtBlacklistService jwtBlacklistService;
+
+    @MockBean
+    CurrentUserService currentUserService;
 
     public static final String ALREADY_EXISTS_ERROR = "username already exists";
 

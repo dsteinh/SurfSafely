@@ -12,6 +12,8 @@ import hr.algebra.surfsafly.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class QuizConverter {
@@ -21,6 +23,7 @@ public class QuizConverter {
 
     public QuizDto convert(Quiz quiz) {
         return QuizDto.builder()
+                .id(Objects.nonNull(quiz.getId()) ? quiz.getId() : null)
                 .questionDtoList(quiz.getQuestions()
                         .stream().map(questionConverter::convert).toList())
                 .title(quiz.getTitle())
@@ -32,6 +35,7 @@ public class QuizConverter {
     public Quiz convert(QuizDto quizDto) throws UserNotFoundException {
 
         Quiz quiz = new Quiz();
+        quiz.setId(Objects.nonNull(quizDto.getId()) ? quizDto.getId() : null);
         quiz.setTitle(quizDto.getTitle());
         quiz.setDescription(quizDto.getDescription());
         quiz.setAuthor(userService.getCurrentUser());

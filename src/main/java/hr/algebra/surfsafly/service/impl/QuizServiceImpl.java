@@ -1,5 +1,6 @@
 package hr.algebra.surfsafly.service.impl;
 
+import hr.algebra.surfsafly.dto.AnswerDto;
 import hr.algebra.surfsafly.model.Quiz;
 import hr.algebra.surfsafly.repository.AnswerRepository;
 import hr.algebra.surfsafly.repository.QuestionRepository;
@@ -40,5 +41,10 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public void deleteAll() {
         quizRepository.deleteAll();
+    }
+
+    @Override
+    public Double calculateResults(Long quizId, List<AnswerDto> answerDtos) {
+        return 0.0;
     }
 }

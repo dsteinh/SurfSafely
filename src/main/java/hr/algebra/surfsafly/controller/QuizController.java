@@ -2,6 +2,7 @@ package hr.algebra.surfsafly.controller;
 
 
 import hr.algebra.surfsafly.converter.QuizConverter;
+import hr.algebra.surfsafly.dto.AnswerDto;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
 import hr.algebra.surfsafly.dto.QuizDto;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
@@ -55,5 +56,12 @@ public class QuizController {
     public ResponseEntity<ApiResponseDto> getAllQuizzes() {
         List<Quiz> all = quizService.getAll();
         return ResponseEntity.ok(ApiResponseDto.ok(all));
+    }
+
+    @PostMapping("/solve/{quizId}")
+    public ResponseEntity<ApiResponseDto> solveQuiz(@PathVariable Long quizId,
+                                                    @RequestBody List<AnswerDto> answerDtos) {
+        quizService.calculateResults(quizId,answerDtos);
+        return null;
     }
 }

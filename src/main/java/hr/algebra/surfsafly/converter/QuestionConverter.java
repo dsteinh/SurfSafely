@@ -5,6 +5,8 @@ import hr.algebra.surfsafly.model.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class QuestionConverter {
@@ -12,6 +14,7 @@ public class QuestionConverter {
 
     public QuestionDto convert(Question question) {
         return QuestionDto.builder()
+                .quizId(Objects.nonNull(question.getId()) ? question.getId() : null)
                 .questionText(question.getQuestionText())
                 .answerDtoList(question.getAnswers()
                         .stream().map(answerConverter::convert).toList())
@@ -21,6 +24,7 @@ public class QuestionConverter {
 
     public Question convert(QuestionDto questionDto) {
         return Question.builder()
+                .id(Objects.nonNull(questionDto.getId()) ? questionDto.getId() : null)
                 .questionText(questionDto.getQuestionText())
                 .answers(questionDto.getAnswerDtoList()
                         .stream().map(answerConverter::convert).toList())
