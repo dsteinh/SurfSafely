@@ -1,9 +1,24 @@
 package hr.algebra.surfsafly.service;
 
+import hr.algebra.surfsafly.dto.SolveAttemptDto;
 import hr.algebra.surfsafly.model.Quiz;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public interface QuizService {
-    void saveQuiz(Quiz quiz);
+    Quiz create(Quiz quiz);
+
+    @Transactional
+    void delete(Long id);
+
+    Quiz getQuizById(Long id);
+
+    List<Quiz> getAll();
+
+    void deleteAll();
+
+    Double calculateResults(SolveAttemptDto solveAttemptDto);
 }

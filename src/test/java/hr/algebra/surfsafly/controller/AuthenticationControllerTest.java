@@ -59,6 +59,12 @@ class AuthenticationControllerTest {
     @MockBean
     JwtUserDetailsService jwtUserDetailsService;
 
+    @MockBean
+    JwtBlacklistService jwtBlacklistService;
+
+    @MockBean
+    CurrentUserService currentUserService;
+
     public static final String ALREADY_EXISTS_ERROR = "username already exists";
 
     @Test
