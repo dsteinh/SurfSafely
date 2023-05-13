@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.NoSuchElementException;
+
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -15,6 +17,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<ApiResponseDto> handlePasswordMismatchException(PasswordMismatchException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDto.error("", e.getMessage()));
+    }
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ApiResponseDto> handleNoSuchElementException(ElementNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponseDto.error(e.element, e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

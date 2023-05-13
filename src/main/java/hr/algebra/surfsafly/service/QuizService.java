@@ -1,6 +1,6 @@
 package hr.algebra.surfsafly.service;
 
-import hr.algebra.surfsafly.dto.AnswerDto;
+import hr.algebra.surfsafly.dto.SolveAttemptDto;
 import hr.algebra.surfsafly.model.Quiz;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,5 +20,5 @@ public interface QuizService {
 
     void deleteAll();
 
-    Double calculateResults(Long quizId, List<AnswerDto> answerDtos);
+    Double calculateResults(SolveAttemptDto solveAttemptDto);
 }

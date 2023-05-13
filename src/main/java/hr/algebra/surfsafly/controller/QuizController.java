@@ -2,11 +2,14 @@ package hr.algebra.surfsafly.controller;
 
 
 import hr.algebra.surfsafly.converter.QuizConverter;
-import hr.algebra.surfsafly.dto.AnswerDto;
 import hr.algebra.surfsafly.dto.ApiResponseDto;
 import hr.algebra.surfsafly.dto.QuizDto;
+import hr.algebra.surfsafly.dto.SolveAttemptDto;
+import hr.algebra.surfsafly.dto.SolveAttemptResultDto;
+import hr.algebra.surfsafly.exception.ElementNotFoundException;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.Quiz;
+import hr.algebra.surfsafly.repository.AnswerRepository;
 import hr.algebra.surfsafly.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +24,7 @@ import java.util.List;
 @RequestMapping("api/quiz")
 @Log4j2
 public class QuizController {
+    private final AnswerRepository answerRepository;
     private final QuizService quizService;
     private final QuizConverter quizConverter;
 
@@ -58,10 +62,13 @@ public class QuizController {
         return ResponseEntity.ok(ApiResponseDto.ok(all));
     }
 
-    @PostMapping("/solve/{quizId}")
-    public ResponseEntity<ApiResponseDto> solveQuiz(@PathVariable Long quizId,
-                                                    @RequestBody List<AnswerDto> answerDtos) {
-        quizService.calculateResults(quizId,answerDtos);
-        return null;
+    @PostMapping("/solve")
+    public ResponseEntity<ApiResponseDto> solveQuiz(@RequestBody SolveAttemptDto solveAttemptDto) throws ElementNotFoundException {
+        Double result = quizService.calculateResults(solveAttemptDto);
+        Quiz quiz = answerRepository.findById(solveAttemptDto.getAnswerIds().get(0)).orElseThrow(() -> new ElementNotFoundException("element not found", "answer")).getQuestion().getQuiz();
+        var response = SolveAttemptResultDto.builder()
+                .quizId(quiz.getId())
+                .correctnessPercentage(result).build();
+        return ResponseEntity.ok(ApiResponseDto.ok(response));
     }
 }
