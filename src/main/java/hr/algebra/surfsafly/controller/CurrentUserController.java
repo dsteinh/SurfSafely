@@ -46,7 +46,7 @@ public class CurrentUserController {
     }
     private void mapPersonalDataDtoToUser(ChangeUserInformationDto dto, User currentUser) {
         currentUser.setEmail(Objects.nonNull(dto.getNewEmail()) ? dto.getNewEmail() : currentUser.getEmail());
-        currentUser.setFirstName(Objects.nonNull(dto.getNewFistName()) ? dto.getNewFistName() : currentUser.getFirstName());
+        currentUser.setFirstName(Objects.nonNull(dto.getNewFirstName()) ? dto.getNewFirstName() : currentUser.getFirstName());
         currentUser.setLastName(Objects.nonNull(dto.getNewLastName()) ? dto.getNewLastName() : currentUser.getLastName());
     }
 }
