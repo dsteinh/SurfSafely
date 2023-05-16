@@ -25,7 +25,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUserDetailsService jwtUserDetailsService;
     private final JwtUtils jwtUtils;
 
-    private static final String[] ENDPOINTS_TO_SKIP = {"/api/auth/register"};
+    private static final String[] ENDPOINTS_TO_SKIP = {"/api/auth/register", "/api/auth/login"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
