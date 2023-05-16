@@ -28,6 +28,7 @@ public class CurrentUserController {
         User currentUser = currentUserService.getCurrentUser();
         mapPersonalDataDtoToUser(dto, currentUser);
         UserDto userDto = userConverter.convert(userService.save(currentUser));
+        userDto.setPassword("");
         return ResponseEntity.ok(ApiResponseDto.ok(userDto));
     }
 
