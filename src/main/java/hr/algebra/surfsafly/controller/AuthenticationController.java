@@ -44,6 +44,7 @@ public class AuthenticationController {
         try {
             User user = userConverter.convert(userDto);
             userService.saveUser(user);
+            userDto.setPassword("");
             return new ResponseEntity<>(ApiResponseDto.ok(userDto), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(ApiResponseDto.error(userDto, e.getMessage()), HttpStatus.CONFLICT);

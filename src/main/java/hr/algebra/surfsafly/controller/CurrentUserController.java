@@ -42,6 +42,7 @@ public class CurrentUserController {
     public ResponseEntity<ApiResponseDto> getCurrentUser() throws UserNotFoundException {
         User currentUser = currentUserService.getCurrentUser();
         UserDto userDto = userConverter.convert(currentUser);
+        userDto.setPassword("");
         return ResponseEntity.ok(ApiResponseDto.ok(userDto));
     }
     private void mapPersonalDataDtoToUser(ChangeUserInformationDto dto, User currentUser) {
