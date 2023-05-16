@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ChangeUserInformationDto {
-    private String newFistName;
+    private String newFirstName;
     private String newLastName;
     private String newEmail;
 }
