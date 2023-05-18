@@ -51,19 +51,7 @@ public class QuizController {
         return ResponseEntity.ok(ApiResponseDto.ok("all quizzes deleted"));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto> getQuizById(@PathVariable Long id) {
-        Quiz quiz = quizService.getQuizById(id);
-        return ResponseEntity.ok(ApiResponseDto.ok(quiz));
-    }
-
     @GetMapping("/all")
-    public ResponseEntity<ApiResponseDto> getAllQuizzes() {
-        List<Quiz> all = quizService.getAll();
-        return ResponseEntity.ok(ApiResponseDto.ok(all));
-    }
-
-    @GetMapping("/allDto")
     public ResponseEntity<ApiResponseDto> getAllQuizzesDto() {
         List<Quiz> all = quizService.getAll();
         List<QuizDto> allDto=new ArrayList<>();
@@ -73,7 +61,7 @@ public class QuizController {
         }
         return ResponseEntity.ok(ApiResponseDto.ok(allDto));
     }
-    @GetMapping("/dto/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDto> getQuizDtoById(@PathVariable Long id) {
         Quiz quiz = quizService.getQuizById(id);
         QuizDto quizDto = quizConverter.convert(quiz);
