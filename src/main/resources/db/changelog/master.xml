@@ -15,4 +15,5 @@
     <include file="db/changelog/table/jwt-blacklist.xml"/>
     <include file="db/changelog/table/additions/delete-jwt-is-expired.xml"/>
     <include file="db/changelog/table/additions/add-more-size-to-jwt-token-blacklist.xml"/>
+    <include file="db/changelog/table/additions/add-more-size-to-question.xml"/>
 </databaseChangeLog>

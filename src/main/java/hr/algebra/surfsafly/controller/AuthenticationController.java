@@ -54,11 +54,14 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponseDto> login(@RequestBody UserDto userDto) {
         try {
+            if (userDto.getUsername().startsWith("Anonymous_")) {
+                throw new UserNotFoundException("Forbidden username");
+            }
             if (Objects.isNull(userDto.getUsername()) || Objects.isNull(userDto.getPassword())) {
                 throw new UserNotFoundException("Username or Password is Empty");
             }
             Optional<User> userData = userService.getUserByUsernameAndPassword(userDto.getUsername(), userDto.getPassword());
-            if (userData.isEmpty() || Objects.equals(userDto.getUsername(), "Anonymous")) {
+            if (userData.isEmpty()) {
                 throw new UserNotFoundException("Username or Password is Invalid");
             }
             return new ResponseEntity<>(ApiResponseDto.ok(jwtUtils.generateToken(
