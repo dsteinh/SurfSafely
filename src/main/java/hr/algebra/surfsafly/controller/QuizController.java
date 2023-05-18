@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -60,6 +61,23 @@ public class QuizController {
     public ResponseEntity<ApiResponseDto> getAllQuizzes() {
         List<Quiz> all = quizService.getAll();
         return ResponseEntity.ok(ApiResponseDto.ok(all));
+    }
+
+    @GetMapping("/allDto")
+    public ResponseEntity<ApiResponseDto> getAllQuizzesDto() {
+        List<Quiz> all = quizService.getAll();
+        List<QuizDto> allDto=new ArrayList<>();
+        for (Quiz quiz:all) {
+            QuizDto convertedDto = quizConverter.convert(quiz);
+            allDto.add(convertedDto);
+        }
+        return ResponseEntity.ok(ApiResponseDto.ok(allDto));
+    }
+    @GetMapping("/dto/{id}")
+    public ResponseEntity<ApiResponseDto> getQuizDtoById(@PathVariable Long id) {
+        Quiz quiz = quizService.getQuizById(id);
+        QuizDto quizDto = quizConverter.convert(quiz);
+        return ResponseEntity.ok(ApiResponseDto.ok(quizDto));
     }
 
     @PostMapping("/solve")
