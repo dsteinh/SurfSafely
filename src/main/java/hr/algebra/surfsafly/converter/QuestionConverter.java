@@ -14,7 +14,7 @@ public class QuestionConverter {
 
     public QuestionDto convert(Question question) {
         return QuestionDto.builder()
-                .quizId(Objects.nonNull(question.getId()) ? question.getId() : null)
+                .id(Objects.nonNull(question.getId()) ? question.getId() : null)
                 .questionText(question.getQuestionText())
                 .answerDtoList(question.getAnswers()
                         .stream().map(answerConverter::convert).toList())
