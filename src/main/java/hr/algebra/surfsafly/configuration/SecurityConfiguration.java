@@ -31,9 +31,9 @@ public class SecurityConfiguration {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors();
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("api/auth/login", "api/auth/register").permitAll()
