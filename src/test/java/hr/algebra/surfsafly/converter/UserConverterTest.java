@@ -79,7 +79,7 @@ class UserConverterTest {
 
         // assert
         Assertions.assertEquals("jovan", user.getUsername());
-        Assertions.assertEquals("jovan", user.getPassword());
+        Assertions.assertEquals("", user.getPassword());
         Assertions.assertEquals("Admin", user.getFirstName());
         Assertions.assertEquals("Admin", user.getLastName());
         Assertions.assertEquals("admin.admin@mail.hr", user.getEmail());

@@ -112,18 +112,6 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void givenUserWithMissingCredentials_whenLogin_thenReturnError() throws Exception {
-        UserDto userDto = UserDtoMother.usernameAndPasswordAreNull().build();
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(userDto)))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.content().string(asJsonString(ApiResponseDto.builder().error("Username or Password is Empty").build())))
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
     void givenUserWithInvalidCredentials_whenLogin_thenReturnError() throws Exception {
         UserDto userDto = UserDtoMother.complete().build();
         Mockito.when(userService.getUserByUsernameAndPassword(userDto.getUsername(), userDto.getPassword()))

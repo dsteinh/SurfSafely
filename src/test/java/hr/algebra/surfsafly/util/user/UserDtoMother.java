@@ -9,7 +9,7 @@ public class UserDtoMother {
                 .firstName("Admin")
                 .lastName("Admin")
                 .username("jovan")
-                .password("jovan")
+                .password("")
                 .roleId(1L)
                 .email("admin.admin@mail.hr");
 
