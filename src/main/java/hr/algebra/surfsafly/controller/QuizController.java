@@ -9,7 +9,10 @@ import hr.algebra.surfsafly.dto.SolveAttemptResultDto;
 import hr.algebra.surfsafly.exception.ElementNotFoundException;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.Quiz;
+import hr.algebra.surfsafly.model.UserPoints;
 import hr.algebra.surfsafly.repository.AnswerRepository;
+import hr.algebra.surfsafly.repository.UserPointsRepository;
+import hr.algebra.surfsafly.service.CurrentUserService;
 import hr.algebra.surfsafly.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,6 +30,8 @@ public class QuizController {
     private final AnswerRepository answerRepository;
     private final QuizService quizService;
     private final QuizConverter quizConverter;
+    private final UserPointsRepository userPointsRepository;
+    private final CurrentUserService currentUserService;
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
@@ -64,9 +69,17 @@ public class QuizController {
     }
 
     @PostMapping("/solve")
-    public ResponseEntity<ApiResponseDto> solveQuiz(@RequestBody SolveAttemptDto solveAttemptDto) throws ElementNotFoundException {
+    public ResponseEntity<ApiResponseDto> solveQuiz(@RequestBody SolveAttemptDto solveAttemptDto) throws ElementNotFoundException, UserNotFoundException {
         Double result = quizService.calculateResults(solveAttemptDto);
         Quiz quiz = answerRepository.findById(solveAttemptDto.getAnswerIds().get(0)).orElseThrow(() -> new ElementNotFoundException("element not found", "answer")).getQuestion().getQuiz();
+        UserPoints userPoints = userPointsRepository.findByUserId(currentUserService.getCurrentUser().getId()).orElseThrow();
+        userPointsRepository.save(
+          UserPoints.builder()
+                  .id(userPoints.getId())
+                  .userId(userPoints.getUserId())
+                  .money((long) (userPoints.getMoney()+(result*100)))
+                  .score((long) (userPoints.getScore()+(result*100))).build());
+
         var response = SolveAttemptResultDto.builder()
                 .quizId(quiz.getId())
                 .correctnessPercentage(result).build();

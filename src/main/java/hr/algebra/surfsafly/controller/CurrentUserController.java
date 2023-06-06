@@ -6,6 +6,8 @@ import hr.algebra.surfsafly.dto.ChangeUserInformationDto;
 import hr.algebra.surfsafly.dto.UserDto;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.User;
+import hr.algebra.surfsafly.model.UserPoints;
+import hr.algebra.surfsafly.repository.UserPointsRepository;
 import hr.algebra.surfsafly.service.CurrentUserService;
 import hr.algebra.surfsafly.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class CurrentUserController {
     private final CurrentUserService currentUserService;
     private final UserService userService;
     private final UserConverter userConverter;
+    private final UserPointsRepository userPointsRepository;
 
     @PostMapping("/update-personal-information")
     public ResponseEntity<ApiResponseDto> changePersonalData(@RequestBody ChangeUserInformationDto dto) throws UserNotFoundException {
@@ -46,9 +49,17 @@ public class CurrentUserController {
         userDto.setPassword("");
         return ResponseEntity.ok(ApiResponseDto.ok(userDto));
     }
+
     private void mapPersonalDataDtoToUser(ChangeUserInformationDto dto, User currentUser) {
         currentUser.setEmail(Objects.nonNull(dto.getNewEmail()) ? dto.getNewEmail() : currentUser.getEmail());
         currentUser.setFirstName(Objects.nonNull(dto.getNewFirstName()) ? dto.getNewFirstName() : currentUser.getFirstName());
         currentUser.setLastName(Objects.nonNull(dto.getNewLastName()) ? dto.getNewLastName() : currentUser.getLastName());
+    }
+
+    @GetMapping("/get-points")
+    public ResponseEntity<ApiResponseDto> getPoints() throws UserNotFoundException {
+        User currentUser = currentUserService.getCurrentUser();
+        UserPoints userPoints = userPointsRepository.findByUserId(currentUser.getId()).orElseThrow();
+        return ResponseEntity.ok(ApiResponseDto.ok(userPoints));
     }
 }

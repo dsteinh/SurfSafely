@@ -8,6 +8,10 @@ import hr.algebra.surfsafly.exception.PasswordMismatchException;
 import hr.algebra.surfsafly.exception.UserNotFoundException;
 import hr.algebra.surfsafly.model.JwtBlacklistData;
 import hr.algebra.surfsafly.model.User;
+import hr.algebra.surfsafly.model.UserAvatar;
+import hr.algebra.surfsafly.model.UserPoints;
+import hr.algebra.surfsafly.repository.UserAvatarRepository;
+import hr.algebra.surfsafly.repository.UserPointsRepository;
 import hr.algebra.surfsafly.security.JwtUtils;
 import hr.algebra.surfsafly.security.JwtUtilsImpl;
 import hr.algebra.surfsafly.service.CurrentUserService;
@@ -35,6 +39,9 @@ public class AuthenticationController {
     private final UserConverter userConverter;
     private final JwtBlacklistService jwtBlacklistService;
     private final CurrentUserService currentUserService;
+    private final UserPointsRepository userPointsRepository;
+    private final UserAvatarRepository userAvatarRepository;
+
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponseDto> register(@RequestBody UserDto userDto) {
@@ -45,10 +52,25 @@ public class AuthenticationController {
             User user = userConverter.convert(userDto);
             userService.saveUser(user);
             userDto.setPassword("");
+            User savedUser = userService.getByUsername(userDto.getUsername()).get();
+            setUserPoints(savedUser);
+            userAvatarRepository.save(UserAvatar.builder()
+                            .avatarId(1L)
+                            .userId(savedUser.getId())
+                            .isProfilePicture(true).build());
+
             return new ResponseEntity<>(ApiResponseDto.ok(userDto), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(ApiResponseDto.error(userDto, e.getMessage()), HttpStatus.CONFLICT);
         }
+    }
+
+    private void setUserPoints(User user) {
+        userPointsRepository.save(
+                UserPoints.builder()
+                        .userId(user.getId())
+                        .score(0L)
+                        .money(0L).build());
     }
 
     @PostMapping("/login")

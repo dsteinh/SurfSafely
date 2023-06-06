@@ -2,6 +2,7 @@ package hr.algebra.surfsafly.service.impl;
 
 import hr.algebra.surfsafly.dto.SolveAttemptDto;
 import hr.algebra.surfsafly.model.Answer;
+import hr.algebra.surfsafly.model.Question;
 import hr.algebra.surfsafly.model.Quiz;
 import hr.algebra.surfsafly.repository.AnswerRepository;
 import hr.algebra.surfsafly.repository.QuestionRepository;
@@ -47,7 +48,14 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Double calculateResults(SolveAttemptDto solveAttemptDto) {
         List<Answer> answers = answerRepository.findAllById(solveAttemptDto.getAnswerIds());
+        List<Question> questions = answers.get(0).getQuestion().getQuiz().getQuestions();
+
+        long numberOfAnswers = questions.stream()
+                .mapToLong(q -> q.getAnswers()
+                        .stream()
+                        .filter(Answer::getIsCorrect)
+                        .count()).sum();
         long i = answers.stream().filter(Answer::getIsCorrect).count();
-        return ((double) i) / answers.size();
+        return ((double) i) / numberOfAnswers;
     }
 }

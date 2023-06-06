@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="dsteinh" id="create_avatar_table">
+        <createTable tableName="avatar">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="photo" type="VARCHAR()"/>
+            <column name="price" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="dsteinh" id="add_sequence_to_avatar_id">
+        <createSequence sequenceName="avatar_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -16,4 +16,8 @@
     <include file="db/changelog/table/additions/delete-jwt-is-expired.xml"/>
     <include file="db/changelog/table/additions/add-more-size-to-jwt-token-blacklist.xml"/>
     <include file="db/changelog/table/additions/add-more-size-to-question.xml"/>
+    <include file="db/changelog/table/user-points.xml"/>
+    <include file="db/changelog/table/avatar.xml"/>
+    <include file="db/changelog/table/user-avatar.xml"/>
+    <include file="db/changelog/codebook/insert-default-avatar.xml"/>
 </databaseChangeLog>
