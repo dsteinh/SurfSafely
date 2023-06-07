@@ -64,8 +64,7 @@ public class AvatarController {
 
     @PostMapping("/buy/{avatarId}")
     public ResponseEntity<ApiResponseDto> buy(@PathVariable Long avatarId) throws UserNotFoundException {
-        UserAvatar byAvatarId = userAvatarRepository.findByAvatarId(avatarId);
-        Avatar avatar = avatarRepository.findById(byAvatarId.getAvatarId()).orElseThrow();
+        Avatar avatar = avatarRepository.findById(avatarId).orElseThrow();
         UserPoints userPoints = userPointsRepository.findByUserId(currentUserService.getCurrentUser().getId()).orElseThrow();
         if (userPoints.getMoney() < avatar.getPrice()) {
             return ResponseEntity.ok(ApiResponseDto.error("","not enough points"));
