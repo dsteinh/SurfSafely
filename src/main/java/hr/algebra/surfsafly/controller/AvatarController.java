@@ -54,9 +54,10 @@ public class AvatarController {
     }
 
     @PostMapping("/makeMain/{avatarId}")
-    public ResponseEntity<ApiResponseDto> getAll(@PathVariable Long avatarId) {
+    public ResponseEntity<ApiResponseDto> makeMain(@PathVariable Long avatarId) throws UserNotFoundException {
+        Long userId = currentUserService.getCurrentUser().getId();
         userAvatarRepository.findAll().forEach(userAvatar -> userAvatar.setIsProfilePicture(false));
-        UserAvatar byAvatarId = userAvatarRepository.findByAvatarId(avatarId);
+        UserAvatar byAvatarId = userAvatarRepository.findByAvatarIdAndUserId(avatarId, userId);
         byAvatarId.setIsProfilePicture(true);
         userAvatarRepository.save(byAvatarId);
         return ResponseEntity.ok(ApiResponseDto.ok("new avatar is set"));
